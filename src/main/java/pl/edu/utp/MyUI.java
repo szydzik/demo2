@@ -97,8 +97,10 @@ public class MyUI extends UI implements ViewDisplay {
 
 //		btnSignIn = createNavigationButton("Sign in", FontAwesome.SIGN_IN, SimpleLoginView.VIEW_NAME);
 		btnSignIn = new Button("Sign In", evt -> {
-
+			panel.setContent(new SimpleLoginForm(this::login));
 		});
+		btnSignIn.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		btnSignIn.setIcon(FontAwesome.SIGN_IN);
 		navigationBar.addComponent(btnSignIn);
 
 		btnSignUp = createNavigationButton("Sign up", FontAwesome.PENCIL_SQUARE_O, RegisterView.VIEW_NAME);
