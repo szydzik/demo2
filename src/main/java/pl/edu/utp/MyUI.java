@@ -23,6 +23,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import pl.edu.utp.form.SimpleLoginForm;
 import pl.edu.utp.view.*;
+import pl.edu.utp.view.error.AccessDeniedView;
 import pl.edu.utp.view.error.PageNotFoundView;
 
 /**
@@ -126,6 +127,9 @@ public class MyUI extends UI implements ViewDisplay {
 
 		setContent(layout);
 		setErrorHandler(this::handleError);
+		getNavigator().setErrorView(pageNotFoundView);
+		viewProvider.setAccessDeniedViewClass(AccessDeniedView.class);
+		getNavigator().addProvider(viewProvider);
 
 	}
 
