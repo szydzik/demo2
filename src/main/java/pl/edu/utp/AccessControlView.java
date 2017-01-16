@@ -12,10 +12,9 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import pl.edu.utp.view.AdminHomeView;
-import pl.edu.utp.view.HomeView;
-import pl.edu.utp.view.RegisterView;
-import pl.edu.utp.view.UserHomeView;
+import pl.edu.utp.model.user.Function;
+import pl.edu.utp.model.user.Role;
+import pl.edu.utp.repository.RoleRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
@@ -35,23 +34,24 @@ public class AccessControlView extends VerticalLayout implements View, ViewAcces
     @Autowired
     ApplicationContext applicationContext;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     @PostConstruct
     void init() {
-        allowedViews.add(VIEW_NAME);
-        allowedViews.add(AdminHomeView.VIEW_NAME);
-        allowedViews.add(HomeView.VIEW_NAME);
-        allowedViews.add(RegisterView.VIEW_NAME);
-        allowedViews.add(UserHomeView.VIEW_NAME);
 
         setMargin(true);
         setSpacing(true);
         addComponent(new Label("Here you can control the access to the different views within this particular UI. Uncheck a few boxes and try to navigate to their corresponding views. " +
                 "In a real application, you would probably base the access decision on the current user's role or something similar."));
 
-        addComponent(createViewCheckbox("Allow access to the AdminHomeView", AdminHomeView.VIEW_NAME));
-        addComponent(createViewCheckbox("Allow access to the HomeView", HomeView.VIEW_NAME));
-        addComponent(createViewCheckbox("Allow access to the RegisterView", RegisterView.VIEW_NAME));
-        addComponent(createViewCheckbox("Allow access to the UserHomeView", UserHomeView.VIEW_NAME));
+        Role role = roleRepository.findByName("ROLE_ADMIN");
+        if (role != null && role.getFunctions() != null){
+            for (Function f : role.getFunctions()){
+                allowedViews.add(f.getView());
+                if (!f.getView().equals("access")) {addComponent(createViewCheckbox(f.getCode(), f.getView()));}
+            }
+        }
     }
 
     private CheckBox createViewCheckbox(String caption, final String viewName) {
@@ -83,16 +83,4 @@ public class AccessControlView extends VerticalLayout implements View, ViewAcces
         }
     }
 
-
-
-//    @Override
-//    public boolean isAccessGranted(UI ui, String beanName) {
-//        System.out.println("debug------> beanName: "+beanName);
-//        if (beanName.equals("adminSecretView")) {
-//            System.out.println(AdminSecretView.VIEW_NAME+": odmówiono autoryzacji");
-//            return SecurityUtils.hasRole("ROLE_ADMIN");
-//        } else {
-//            return SecurityUtils.hasRole("ROLE_USER");
-//        }
-//    }
 }
