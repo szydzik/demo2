@@ -50,6 +50,7 @@ public class MyUI extends UI implements ViewDisplay {
 	private Button btnUser;
 	private Button btnAdmin;
 	private Button btnAdminHidden;
+	private Button btnAccessControl;
 	private Button btnSignIn;
 	private Button btnSignUp;
 	private Button btnLogout;
@@ -95,6 +96,9 @@ public class MyUI extends UI implements ViewDisplay {
 
 		btnAdminHidden = createNavigationButton("Admin secret", FontAwesome.EYE_SLASH, AdminSecretView.VIEW_NAME);
 		navigationBar.addComponent(btnAdminHidden);
+
+		btnAccessControl = createNavigationButton("Admin Control", FontAwesome.EYE_SLASH, AccessControlView.VIEW_NAME);
+		navigationBar.addComponent(btnAccessControl);
 
 //		btnSignIn = createNavigationButton("Sign in", FontAwesome.SIGN_IN, SimpleLoginView.VIEW_NAME);
 		btnSignIn = new Button("Sign In", evt -> {

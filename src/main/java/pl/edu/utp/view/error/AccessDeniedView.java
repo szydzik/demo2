@@ -2,25 +2,32 @@ package pl.edu.utp.view.error;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.spring.annotation.PrototypeScope;
+
+import javax.annotation.PostConstruct;
 
 @SpringComponent // No SpringView annotation because this view can not be navigated to
-@UIScope
+@PrototypeScope
 public class AccessDeniedView extends VerticalLayout implements View {
 
-    public AccessDeniedView() {
+    private Label message;
+
+    @PostConstruct
+    void init() {
         setMargin(true);
-        Label label = new Label("You don't have access to this view. (Nie masz dostępu do tego widoku!)");
-        label.addStyleName(ValoTheme.LABEL_FAILURE);
-        label.setSizeUndefined();
-        addComponent(label);
+        message = new Label();
+        addComponent(message);
+        message.addStyleName(ValoTheme.LABEL_FAILURE);
+        message.setContentMode(ContentMode.HTML);
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        message.setValue(String.format("Sorry, but you don't have access to the view <b>%s</b>.", event.getViewName()));
     }
 }
