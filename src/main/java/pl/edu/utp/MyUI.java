@@ -11,6 +11,7 @@ import com.vaadin.shared.communication.PushMode;
 import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
+import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class MyUI extends UI implements ViewDisplay {
 
 	@Autowired
 	PageNotFoundView pageNotFoundView;
+
+	@Autowired
+	SpringViewProvider viewProvider;
 
 	private Panel panel;
 
@@ -118,10 +122,6 @@ public class MyUI extends UI implements ViewDisplay {
 		setContent(layout);
 		setErrorHandler(this::handleError);
 
-//		Navigator navigator = new Navigator(this, this.panel);
-//		navigator.addProvider(viewProvider);
-//		navigator.setErrorView(this.pageNotFoundView);
-//		viewProvider.setAccessDeniedViewClass(AccessDeniedView.class);
 	}
 
 	private void showLogin() {
@@ -172,20 +172,15 @@ public class MyUI extends UI implements ViewDisplay {
 
 	@Override
 	public void showView(View view) {
-		if (SecurityUtils.isLoggedIn()) {
-//			showMain();
-			if (SecurityUtils.hasRole("ADMIN")){
-				displayAdminNavbar();
-			}else{
-				displayUserNavbar();
-			}
+//		panel.setContent((Component) view);
+//
+ 		if (SecurityUtils.isLoggedIn()) {
+			System.out.println("Logged in");
 			panel.setContent((Component) view);
 		} else {
-			displayAnonymousNavbar();
+			System.out.println("Not Logged in");
 			panel.setContent(new LoginForm(this::login));
-//			showLogin();
 		}
-
 	}
 
 	private void displayAnonymousNavbar() {

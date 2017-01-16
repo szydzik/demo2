@@ -5,6 +5,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
@@ -14,7 +15,7 @@ import com.vaadin.ui.themes.ValoTheme;
  * Created by xxbar on 08.01.2017.
  */
 @UIScope
-//@SpringView(name = SimpleLoginView.VIEW_NAME)
+@SpringView(name = SimpleLoginView.VIEW_NAME)
 public class SimpleLoginView extends CustomComponent implements View {
 
     public static final String VIEW_NAME = "login";
