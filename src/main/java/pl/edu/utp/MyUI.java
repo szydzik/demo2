@@ -21,15 +21,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import pl.edu.utp.form.SimpleLoginForm;
 import pl.edu.utp.view.*;
-import pl.edu.utp.view.LoginForm;
 import pl.edu.utp.view.error.PageNotFoundView;
 
 /**
  * Created by xxbar on 09.01.2017.
  */
 @Theme(ValoTheme.THEME_NAME)
-@SpringUI(path = "")
+@SpringUI
 @SpringViewDisplay
 public class MyUI extends UI implements ViewDisplay {
 
@@ -95,7 +95,10 @@ public class MyUI extends UI implements ViewDisplay {
 		btnAdminHidden = createNavigationButton("Admin secret", FontAwesome.EYE_SLASH, AdminSecretView.VIEW_NAME);
 		navigationBar.addComponent(btnAdminHidden);
 
-		btnSignIn = createNavigationButton("Sign in", FontAwesome.SIGN_IN, SimpleLoginView.VIEW_NAME);
+//		btnSignIn = createNavigationButton("Sign in", FontAwesome.SIGN_IN, SimpleLoginView.VIEW_NAME);
+		btnSignIn = new Button("Sign In", evt -> {
+
+		});
 		navigationBar.addComponent(btnSignIn);
 
 		btnSignUp = createNavigationButton("Sign up", FontAwesome.PENCIL_SQUARE_O, RegisterView.VIEW_NAME);
@@ -125,7 +128,7 @@ public class MyUI extends UI implements ViewDisplay {
 	}
 
 	private void showLogin() {
-		setContent(new LoginForm(this::login));
+		setContent(new SimpleLoginForm(this::login));
 	}
 
 	private Button createNavigationButton(String caption, FontAwesome fontAwesome, final String viewName) {
@@ -172,14 +175,12 @@ public class MyUI extends UI implements ViewDisplay {
 
 	@Override
 	public void showView(View view) {
-//		panel.setContent((Component) view);
-//
  		if (SecurityUtils.isLoggedIn()) {
 			System.out.println("Logged in");
 			panel.setContent((Component) view);
 		} else {
 			System.out.println("Not Logged in");
-			panel.setContent(new LoginForm(this::login));
+			panel.setContent(new SimpleLoginForm(this::login));
 		}
 	}
 
