@@ -195,7 +195,8 @@ public class MyUI extends UI implements ViewDisplay {
 			panel.setContent((Component) view);
 		} else {
 			System.out.println("Not Logged in");
-			panel.setContent(new SimpleLoginForm(this::login));
+			panel.setContent((Component) view);
+//			panel.setContent(new SimpleLoginForm(this::login));
 		}
 	}
 
