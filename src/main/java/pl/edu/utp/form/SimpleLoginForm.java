@@ -72,6 +72,7 @@ public class SimpleLoginForm extends VerticalLayout {// implements View {
         googleButton = new Button("Log in with Google", FontAwesome.GOOGLE);
         googleButton.setWidth("300px");
         googleButton.addClickListener(event -> {});
+        googleButton.setStyleName(ValoTheme.BUTTON_DANGER);
 
         gitHubButton = new Button("Log in with Github", FontAwesome.GITHUB);
         gitHubButton.setWidth("300px");
@@ -90,14 +91,6 @@ public class SimpleLoginForm extends VerticalLayout {// implements View {
         setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
         setStyleName(Reindeer.LAYOUT_BLUE);
 
-
-//        // The view root layout
-//        VerticalLayout viewLayout = new VerticalLayout(fields);
-//        viewLayout.setSizeFull();
-//        viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
-//        viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
-//
-//        setCompositionRoot(viewLayout);
     }
 
     @FunctionalInterface

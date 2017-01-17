@@ -43,6 +43,9 @@ public class MyUI extends UI implements ViewDisplay {
 	@Autowired
 	SpringViewProvider viewProvider;
 
+	@Autowired
+	HomeView homeView;
+
 	private Panel panel;
 
 	//buttons
@@ -72,6 +75,7 @@ public class MyUI extends UI implements ViewDisplay {
 		final HorizontalLayout navigationBar = new HorizontalLayout();
 		navigationBar.setWidth("100%");
 		navigationBar.setMargin(true);
+		navigationBar.setSpacing(true);
 		navigationBar.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
 
 //		logo
@@ -176,7 +180,8 @@ public class MyUI extends UI implements ViewDisplay {
 			getPushConfiguration().setTransport(Transport.WEBSOCKET);
 			getPushConfiguration().setPushMode(PushMode.AUTOMATIC);
 			// Show the main UI
-			showMain();
+//			showMain();
+			this.showView(homeView);
 			return true;
 		} catch (AuthenticationException ex) {
 			return false;
