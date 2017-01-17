@@ -62,7 +62,11 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-push</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+    </dependencies>
 
 	<dependencyManagement>
 		<dependencies>
