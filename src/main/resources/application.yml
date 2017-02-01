@@ -12,8 +12,6 @@ spring:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
         generate-ddl: true
         show-sql: true
-
-
 security:
   user:
     password: p

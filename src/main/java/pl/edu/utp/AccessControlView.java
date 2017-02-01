@@ -56,14 +56,11 @@ public class AccessControlView extends VerticalLayout implements View, ViewAcces
 
     private CheckBox createViewCheckbox(String caption, final String viewName) {
         final CheckBox checkBox = new CheckBox(caption, true);
-        checkBox.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                if (checkBox.getValue()) {
-                    allowedViews.add(viewName);
-                } else {
-                    allowedViews.remove(viewName);
-                }
+        checkBox.addValueChangeListener((Property.ValueChangeListener) event -> {
+            if (checkBox.getValue()) {
+                allowedViews.add(viewName);
+            } else {
+                allowedViews.remove(viewName);
             }
         });
         return checkBox;

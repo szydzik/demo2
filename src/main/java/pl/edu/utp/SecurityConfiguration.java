@@ -1,38 +1,21 @@
 package pl.edu.utp;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
-import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
-import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
-import javax.servlet.Filter;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 //@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, proxyTargetClass = true)
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    OAuth2ClientContext oauth2ClientContext;
+//@Order(SecurityProperties.BASIC_AUTH_ORDER - 10)
+//public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,22 +28,30 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //@formatter:on
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable(); // Use Vaadin's built-in CSRF protection instead
-
-        http
-                .authorizeRequests()
-                .antMatchers("/login/**","/**").anonymous()
-                .antMatchers("/vaadinServlet/UIDL/**", "/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);;
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.csrf().disable(); // Use Vaadin's built-in CSRF protection instead
+//
+////        http
+////                .authorizeRequests()
+////                .antMatchers("/user-home").permitAll()//hasRole("USER")
+////                .antMatchers("/admin-home").hasRole("ADMIN")
+////                .antMatchers("/login/**").anonymous()
+////                .antMatchers("/").permitAll()
+////                .anyRequest().authenticated();
+//
+//        http.authorizeRequests()
+//                .antMatchers("/VAADIN/**", "/PUSH/**", "/UIDL/**","/login", "/login/**").permitAll()
+//                .antMatchers("/**").permitAll()
+//                .and()
+//                .csrf().disable();
+////                .exceptionHandling()
+////                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"));
+//    }
 
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return authenticationManager();
+        return super.authenticationManager();
     }
 
     public void configure(WebSecurity web) throws Exception {
@@ -70,36 +61,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     static {
         // Use a custom SecurityContextHolderStrategy
-//        SecurityContextHolder.setStrategyName(VaadinSessionSecurityContextHolderStrategy.class.getName());
+        SecurityContextHolder.setStrategyName(VaadinSessionSecurityContextHolderStrategy.class.getName());
     }
 
-    private Filter ssoFilter() {
-        OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
-        OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oauth2ClientContext);
-        facebookFilter.setRestTemplate(facebookTemplate);
-        facebookFilter.setTokenServices(new UserInfoTokenServices(facebookResource().getUserInfoUri(), facebook().getClientId()));
-        return facebookFilter;
-    }
 
-    @Bean
-    @ConfigurationProperties("facebook.client")
-    public AuthorizationCodeResourceDetails facebook() {
-        return new AuthorizationCodeResourceDetails();
-    }
-
-    @Bean
-    @ConfigurationProperties("facebook.resource")
-    public ResourceServerProperties facebookResource() {
-        return new ResourceServerProperties();
-    }
-
-    @Bean
-    public FilterRegistrationBean oauth2ClientFilterRegistration(
-            OAuth2ClientContextFilter filter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(filter);
-        registration.setOrder(-100);
-        return registration;
-    }
 
 }
